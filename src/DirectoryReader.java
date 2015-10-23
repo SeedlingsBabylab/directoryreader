@@ -84,7 +84,7 @@ public class DirectoryReader {
 
 		inLabVisit = new String[]{inLabVis,inLabVisE,inLabVisS,inLabVisSA,inLabVisSI};
 	}
-
+//process gets all the files in the directory attached
 	static void Process(File aFile) {
 		spc_count++;
 		String spcs = "";
@@ -101,7 +101,7 @@ public class DirectoryReader {
 			System.out.println(spcs + "[FILE] " + aFile.getName());
 		checkFile(aFile);
 		moveFile(aFile);
-		if (fileNum==0){
+		if (fileNum==0){//if the is not identified (i.e. unknown file)
 //			if (!(aFile.getName().substring(0, 1).matches("."))){
 		if (!(aFile.getParent().equals(lastParent))){
 			lastParent=aFile.getParent();
@@ -110,7 +110,7 @@ public class DirectoryReader {
 		notMoved = notMoved + aFile.getName()+ "\n";
 //		}
 		}
-		if (moved==0){
+		if (moved==0){// if the file is not moved (those that can't be replaced)
 			if (!(aFile.getParent().equals(lastParentMoved))){
 				lastParentMoved=aFile.getParent();
 				movedTracker= movedTracker + "-----\n[DIR]: " + aFile.getParent()+"\n";
@@ -120,7 +120,7 @@ public class DirectoryReader {
 		}
 		else if (aFile.isDirectory()) {
 			System.out.println(spcs + "[DIR] " + aFile.getName());
-			if (aFile.getName().equals("corrupt")){ //if corrupt folder
+			if (aFile.getName().equals("corrupt")){ //if corrupt folder, moves this first
 				if(aFile.renameTo(new File(homeVisPVid+aFile.getName()))){
 					System.out.println("File moved successfully!");
 					moved = 1;
@@ -142,10 +142,11 @@ public class DirectoryReader {
 		dialog.dispose();
 		
 	}
+	//moveFile uses the the results of check file to move the checked file into the right directory
 	static void moveFile(File file) {
-		if (fileNum>0){
+		if (fileNum>0){//if it's a known file
 			if (fileNum==8){
-				if(file.renameTo(new File(inLabVisE+file.getName()))){
+				if(file.renameTo(new File(inLabVisE+file.getName()))){//moves files with fileNum=8 into inLabVisE folder (established above)
 					System.out.println("File moved successfully!");
 					moved = 1;
 				}else{
@@ -235,8 +236,9 @@ public class DirectoryReader {
 	}
 
 	static void checkFile(File fileIn){
-		fileNum=0;
-		moved=9;
+		fileNum=0;//file starts off as unknown
+		moved=9;//file starts off as not moved
+		//checks the file for the correct regex in these following statements, assigns fileNum if it's recognized
 		if (fileIn.getName().matches("(?i:\\d+_\\d+.edf)")){
 			fileNum=7;
 		}else if (fileIn.getName().matches("(?i:\\d+_\\d+_datasource.xlsx)")){
@@ -461,6 +463,7 @@ public class DirectoryReader {
 			}
 		}
 	}
+	//creates all files in a loop
 	static void createAllFiles(String mainDir2,String subNum){
 		for (int month=6;month<19;month++){
 		mainDir=mainDir2+subNum+"_"+String.format("%02d", month)+"/";
@@ -517,7 +520,7 @@ public class DirectoryReader {
 			    "Create all files?",
 			    "Directory Reader",
 			    JOptionPane.YES_NO_OPTION);
-		if (allFiles==0){
+		if (allFiles==0){//if all files
 			JFileChooser chooser = new JFileChooser();
 			chooser.setCurrentDirectory(new java.io.File("."));
 			chooser.setDialogTitle("CREATE ALL FILES: Choose the directory to create a set of files");
@@ -542,7 +545,7 @@ public class DirectoryReader {
 		            System.out.println("Cancelled");
 		        }
 				}
-		}else{
+		}else{//if not creating all files
 		checkVis = JOptionPane.showConfirmDialog(
 				    null,
 				    "Does this month include an in-lab visit?",
@@ -573,9 +576,9 @@ public class DirectoryReader {
 				getFiles=chooser.getSelectedFile().getPath()+"/";
 				getFiles=getFiles.replace("\\","/");	
 				File aFile = new File(getFiles);
-				Process(aFile);
+				Process(aFile);//this starts the process
 				// create a JTextArea
-			      JTextArea textArea = new JTextArea(25, 50);
+			      JTextArea textArea = new JTextArea(25, 50);//printing the results
 			      ArrayList <String> listClone = new ArrayList<String>(); 
 		           for (String string : movedFileList) {
 		               if(string.toLowerCase().contains("_final".toLowerCase())){
