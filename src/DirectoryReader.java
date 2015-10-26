@@ -174,7 +174,7 @@ public class DirectoryReader {
 				}
 			}
 
-			else if (fileNum==23||fileNum==24||fileNum==41||fileNum==49||fileNum==50){				
+			else if (fileNum==23||fileNum==24||fileNum==41||fileNum==49||fileNum==50||fileNum==53){				
 				if(file.renameTo(new File(homeVisCVidA+file.getName()))){
 					System.out.println("File moved successfully!");
 					moved = 1;
@@ -417,6 +417,9 @@ public class DirectoryReader {
 		}
 		else if (fileIn.getName().matches("(?i:\\d+_\\d+_lena5min.csv)")){
 			fileNum=45;
+		}
+		else if (fileIn.getName().matches("(?i:\\d+_\\d+_personal_info.csv)")){
+			fileNum=53;
 		}
 	}
 	static void createFiles(){
